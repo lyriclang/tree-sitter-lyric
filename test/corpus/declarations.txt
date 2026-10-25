@@ -1,0 +1,299 @@
+================================================================================
+A module header with its attribute, an import
+================================================================================
+
+@When(os == "linux")
+module;
+
+pub import std.io { println as say };
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (attribute_item
+    (attribute_name)
+    (binary_expression
+      (identifier)
+      (string_literal
+        (string_content))))
+  (module_header)
+  (import_declaration
+    (visibility)
+    (dotted_name
+      (identifier)
+      (identifier))
+    (import_item
+      (identifier)
+      (identifier))))
+
+================================================================================
+A struct, its fields and a method
+================================================================================
+
+pub struct Point :: [Show, Walker by legs] {
+    x: int,
+    var y: int = 0,
+    type: string,
+
+    fn sum(): int { return this.x + this.y; }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (struct_declaration
+    (visibility)
+    (identifier)
+    (conformances
+      (conformance
+        (named_type
+          (dotted_name
+            (identifier))))
+      (conformance
+        (named_type
+          (dotted_name
+            (identifier)))
+        (identifier)))
+    (type_body
+      (field_declaration
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier))))
+      (field_declaration
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier)))
+        (integer_literal))
+      (field_declaration
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier))))
+      (function_declaration
+        (identifier)
+        (parameters)
+        (named_type
+          (dotted_name
+            (identifier)))
+        (block
+          (return_statement
+            (binary_expression
+              (member_expression
+                (this)
+                (identifier))
+              (member_expression
+                (this)
+                (identifier)))))))))
+
+================================================================================
+An enum with payloads and a member
+================================================================================
+
+enum Shape {
+    Circle(float),
+    Rect { w: float, h: float },
+    Empty;
+
+    fn area(): float { return 0.0; }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (enum_declaration
+    (identifier)
+    (enum_body
+      (enum_variant
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier))))
+      (enum_variant
+        (identifier)
+        (field_declaration
+          (identifier)
+          (named_type
+            (dotted_name
+              (identifier))))
+        (field_declaration
+          (identifier)
+          (named_type
+            (dotted_name
+              (identifier)))))
+      (enum_variant
+        (identifier))
+      (function_declaration
+        (identifier)
+        (parameters)
+        (named_type
+          (dotted_name
+            (identifier)))
+        (block
+          (return_statement
+            (float_literal)))))))
+
+================================================================================
+A signature's 'throws' and a returned function's
+================================================================================
+
+fn open(p: string): int throws [NotFound, Denied] { return 1; }
+
+fn make(): (fn() -> int throws E) { return f; }
+
+extern "C" fn floor(x: float): float = "floor";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier)))))
+    (named_type
+      (dotted_name
+        (identifier)))
+    (throws_clause
+      (type_list
+        (named_type
+          (dotted_name
+            (identifier)))
+        (named_type
+          (dotted_name
+            (identifier)))))
+    (block
+      (return_statement
+        (integer_literal))))
+  (function_declaration
+    (identifier)
+    (parameters)
+    (parenthesized_type
+      (function_type
+        (named_type
+          (dotted_name
+            (identifier)))
+        (throws_clause
+          (named_type
+            (dotted_name
+              (identifier))))))
+    (block
+      (return_statement
+        (identifier))))
+  (function_declaration
+    (extern_spec
+      (string_literal
+        (string_content)))
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier)))))
+    (named_type
+      (dotted_name
+        (identifier)))
+    (string_literal
+      (string_content))))
+
+================================================================================
+Generics, an alias, an interface
+================================================================================
+
+type Pair<T> = (T, T);
+
+opaque type Handle = int;
+
+sealed interface Sized<T :: [Eq], U = Self> {
+    type Item;
+    static let zero: Self;
+    fn size(): int;
+}
+
+extend<T> List<T> :: [Sized] {
+    fn size(): int { return this.length(); }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_alias
+    (identifier)
+    (type_parameters
+      (type_parameter
+        (identifier)))
+    (tuple_type
+      (named_type
+        (dotted_name
+          (identifier)))
+      (named_type
+        (dotted_name
+          (identifier)))))
+  (type_alias
+    (identifier)
+    (named_type
+      (dotted_name
+        (identifier))))
+  (interface_declaration
+    (identifier)
+    (type_parameters
+      (type_parameter
+        (identifier)
+        (type_list
+          (named_type
+            (dotted_name
+              (identifier)))))
+      (type_parameter
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier)))))
+    (interface_body
+      (associated_type
+        (identifier))
+      (static_binding
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier))))
+      (function_declaration
+        (identifier)
+        (parameters)
+        (named_type
+          (dotted_name
+            (identifier))))))
+  (extend_declaration
+    (type_parameters
+      (type_parameter
+        (identifier)))
+    (named_type
+      (dotted_name
+        (identifier))
+      (type_arguments
+        (named_type
+          (dotted_name
+            (identifier)))))
+    (conformances
+      (conformance
+        (named_type
+          (dotted_name
+            (identifier)))))
+    (interface_body
+      (function_declaration
+        (identifier)
+        (parameters)
+        (named_type
+          (dotted_name
+            (identifier)))
+        (block
+          (return_statement
+            (call_expression
+              (member_expression
+                (this)
+                (identifier))
+              (arguments))))))))

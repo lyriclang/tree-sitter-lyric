@@ -1,0 +1,273 @@
+================================================================================
+Loops with labels, a break with a label and a value
+================================================================================
+
+fn f(): int {
+    outer: for ((k, v) in pairs) {
+        if (k == 0) { break outer; }
+    }
+    let found = outer: loop {
+        loop { break outer 3; }
+    };
+    do { i++; } while (i < 3);
+    return found;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (named_type
+      (dotted_name
+        (identifier)))
+    (block
+      (labeled_statement
+        (identifier)
+        (for_statement
+          (tuple_pattern
+            (identifier)
+            (identifier))
+          (identifier)
+          (block
+            (if_expression
+              (binary_expression
+                (identifier)
+                (integer_literal))
+              (block
+                (break_statement
+                  (identifier)))))))
+      (let_statement
+        (identifier)
+        (loop_expression
+          (identifier)
+          (block
+            (loop_expression
+              (block
+                (break_statement
+                  (identifier)
+                  (integer_literal)))))))
+      (do_statement
+        (block
+          (expression_statement
+            (postfix_expression
+              (identifier))))
+        (binary_expression
+          (identifier)
+          (integer_literal)))
+      (return_statement
+        (identifier)))))
+
+================================================================================
+Bindings through patterns, let-else, using
+================================================================================
+
+fn f(): void {
+    let (a, b) = pair;
+    let Circle(r) = shape else { return; };
+    var [first, ..rest] = xs;
+    using let file = open(p);
+    if (let .Some(v) = opt) { use(v); }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (named_type
+      (dotted_name
+        (identifier)))
+    (block
+      (let_statement
+        (tuple_pattern
+          (identifier)
+          (identifier))
+        (identifier))
+      (let_statement
+        (variant_pattern
+          (identifier)
+          (identifier))
+        (identifier)
+        (block
+          (return_statement)))
+      (let_statement
+        (array_pattern
+          (identifier)
+          (rest_pattern
+            (identifier)))
+        (identifier))
+      (using_statement
+        (let_statement
+          (identifier)
+          (call_expression
+            (identifier)
+            (arguments
+              (argument
+                (identifier))))))
+      (expression_statement
+        (if_expression
+          (let_condition
+            (variant_pattern
+              (identifier)
+              (identifier))
+            (identifier))
+          (block
+            (expression_statement
+              (call_expression
+                (identifier)
+                (arguments
+                  (argument
+                    (identifier)))))))))))
+
+================================================================================
+A match with guards, block arms and every kind of pattern
+================================================================================
+
+fn f(): int {
+    return match (s) {
+        .Circle(r) if r > 0.0 => 1,
+        Shape.Rect { w = 0.0, h } => { 2 }
+        0..=9 | -1 => 3,
+        e: IoError => 4,
+        x in [A, B] => 5,
+        _ => 6,
+    };
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (named_type
+      (dotted_name
+        (identifier)))
+    (block
+      (return_statement
+        (match_expression
+          (identifier)
+          (match_arm
+            (variant_pattern
+              (identifier)
+              (identifier))
+            (binary_expression
+              (identifier)
+              (float_literal))
+            (integer_literal))
+          (match_arm
+            (variant_pattern
+              (identifier)
+              (identifier)
+              (field_pattern
+                (identifier)
+                (literal_pattern
+                  (float_literal)))
+              (field_pattern
+                (identifier)))
+            (block
+              (integer_literal)))
+          (match_arm
+            (or_pattern
+              (range_pattern
+                (literal_pattern
+                  (integer_literal))
+                (literal_pattern
+                  (integer_literal)))
+              (literal_pattern
+                (integer_literal)))
+            (integer_literal))
+          (match_arm
+            (typed_pattern
+              (identifier)
+              (named_type
+                (dotted_name
+                  (identifier))))
+            (integer_literal))
+          (match_arm
+            (type_set_pattern
+              (identifier)
+              (type_list
+                (named_type
+                  (dotted_name
+                    (identifier)))
+                (named_type
+                  (dotted_name
+                    (identifier)))))
+            (integer_literal))
+          (match_arm
+            (wildcard_pattern)
+            (integer_literal)))))))
+
+================================================================================
+try and catch, defer, throw
+================================================================================
+
+fn f(): void throws {
+    defer close();
+    let v = try parse(s) catch (e: ParseError) 0;
+    try { run(); } catch (e in [A, B]) { log(e); }
+    throw Oops { };
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (named_type
+      (dotted_name
+        (identifier)))
+    (throws_clause)
+    (block
+      (defer_statement
+        (call_expression
+          (identifier)
+          (arguments)))
+      (let_statement
+        (identifier)
+        (try_expression
+          (call_expression
+            (identifier)
+            (arguments
+              (argument
+                (identifier))))
+          (catch_clause
+            (identifier)
+            (named_type
+              (dotted_name
+                (identifier)))
+            (integer_literal))))
+      (expression_statement
+        (try_expression
+          (block
+            (expression_statement
+              (call_expression
+                (identifier)
+                (arguments))))
+          (catch_clause
+            (identifier)
+            (type_list
+              (named_type
+                (dotted_name
+                  (identifier)))
+              (named_type
+                (dotted_name
+                  (identifier))))
+            (block
+              (expression_statement
+                (call_expression
+                  (identifier)
+                  (arguments
+                    (argument
+                      (identifier)))))))))
+      (expression_statement
+        (throw_expression
+          (struct_initializer
+            (dotted_name
+              (identifier))
+            (struct_initializer_body)))))))

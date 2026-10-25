@@ -1,0 +1,34 @@
+import std.io;
+// <- keyword.import
+//     ^ module
+
+pub struct Point {
+// <- keyword.modifier
+//  ^ keyword.type
+//         ^ type
+    x: int,
+//  ^ property
+//     ^ type.builtin
+}
+
+fn area(p: Point, type: string): float throws {
+// <- keyword.function
+// ^ function
+//      ^ variable.parameter
+//         ^ type
+//                ^ variable.parameter
+//                                     ^ keyword.exception
+    let n = parse<int>("3");
+//  ^ keyword
+//          ^ function.call
+//                     ^ string
+    let s = f"{n:>8}";
+//          ^ string
+//               ^ string.special
+    twice!(n);
+//  ^ function.macro
+    return p.x as float;
+//  ^ keyword.return
+//           ^ property
+//             ^ keyword.operator
+}

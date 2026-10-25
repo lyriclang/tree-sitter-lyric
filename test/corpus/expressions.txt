@@ -1,0 +1,260 @@
+================================================================================
+A '<' between two values compares them
+================================================================================
+
+fn f(): void {
+    if (a < b) { g(); }
+    let c = x << 2;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (named_type
+      (dotted_name
+        (identifier)))
+    (block
+      (expression_statement
+        (if_expression
+          (binary_expression
+            (identifier)
+            (identifier))
+          (block
+            (expression_statement
+              (call_expression
+                (identifier)
+                (arguments))))))
+      (let_statement
+        (identifier)
+        (binary_expression
+          (identifier)
+          (integer_literal))))))
+
+================================================================================
+Type arguments at a call, a path and a method
+================================================================================
+
+fn f(): void {
+    let n = parse<int>("3");
+    let xs = List<int>.new();
+    let ys = xs.collect<List<int>>();
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (named_type
+      (dotted_name
+        (identifier)))
+    (block
+      (let_statement
+        (identifier)
+        (call_expression
+          (generic_name
+            (dotted_name
+              (identifier))
+            (type_arguments
+              (named_type
+                (dotted_name
+                  (identifier)))))
+          (arguments
+            (argument
+              (string_literal
+                (string_content))))))
+      (let_statement
+        (identifier)
+        (call_expression
+          (member_expression
+            (generic_name
+              (dotted_name
+                (identifier))
+              (type_arguments
+                (named_type
+                  (dotted_name
+                    (identifier)))))
+            (identifier))
+          (arguments)))
+      (let_statement
+        (identifier)
+        (call_expression
+          (generic_name
+            (dotted_name
+              (identifier)
+              (identifier))
+            (type_arguments
+              (named_type
+                (dotted_name
+                  (identifier))
+                (type_arguments
+                  (named_type
+                    (dotted_name
+                      (identifier)))))))
+          (arguments))))))
+
+================================================================================
+An initializer and a trailing block
+================================================================================
+
+fn f(): void {
+    let p = Point { x = 1, y };
+    xs.forEach { println(it); }
+    let total = xs.fold(0) { acc, x => acc + x };
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (named_type
+      (dotted_name
+        (identifier)))
+    (block
+      (let_statement
+        (identifier)
+        (struct_initializer
+          (dotted_name
+            (identifier))
+          (struct_initializer_body
+            (field_initializer
+              (identifier)
+              (integer_literal))
+            (shorthand_field
+              (identifier)))))
+      (expression_statement
+        (trailing_call
+          (member_expression
+            (identifier)
+            (identifier))
+          (trailing_lambda
+            (expression_statement
+              (call_expression
+                (identifier)
+                (arguments
+                  (argument
+                    (identifier))))))))
+      (let_statement
+        (identifier)
+        (trailing_call
+          (call_expression
+            (member_expression
+              (identifier)
+              (identifier))
+            (arguments
+              (argument
+                (integer_literal))))
+          (trailing_lambda
+            (trailing_parameter
+              (identifier))
+            (trailing_parameter
+              (identifier))
+            (binary_expression
+              (identifier)
+              (identifier))))))))
+
+================================================================================
+The unwrap, a macro and a membership test
+================================================================================
+
+fn f(): void {
+    let a = x! + 1;
+    twice!(a);
+    let b = o! in xs;
+    let c = o !in xs;
+    let d = !inside;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (named_type
+      (dotted_name
+        (identifier)))
+    (block
+      (let_statement
+        (identifier)
+        (binary_expression
+          (postfix_expression
+            (identifier))
+          (integer_literal)))
+      (expression_statement
+        (macro_invocation
+          (identifier)
+          (macro_arguments
+            (identifier))))
+      (let_statement
+        (identifier)
+        (binary_expression
+          (postfix_expression
+            (identifier))
+          (identifier)))
+      (let_statement
+        (identifier)
+        (binary_expression
+          (identifier)
+          (identifier)))
+      (let_statement
+        (identifier)
+        (unary_expression
+          (identifier))))))
+
+================================================================================
+A lambda, a cast, a coalesce over a block
+================================================================================
+
+fn f(): void {
+    let g = (x: int): int => x * 2;
+    let h = x => x as float;
+    let v = a ?? { return; };
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (named_type
+      (dotted_name
+        (identifier)))
+    (block
+      (let_statement
+        (identifier)
+        (lambda_expression
+          (lambda_parameters
+            (lambda_parameter
+              (identifier)
+              (named_type
+                (dotted_name
+                  (identifier))))
+            (named_type
+              (dotted_name
+                (identifier))))
+          (binary_expression
+            (identifier)
+            (integer_literal))))
+      (let_statement
+        (identifier)
+        (lambda_expression
+          (identifier)
+          (cast_expression
+            (identifier)
+            (named_type
+              (dotted_name
+                (identifier))))))
+      (let_statement
+        (identifier)
+        (binary_expression
+          (identifier)
+          (block
+            (return_statement)))))))

@@ -1,0 +1,91 @@
+================================================================================
+Numbers, characters, strings with a comment's marks in them
+================================================================================
+
+let a = 1_000u8;
+let b = 0xFF;
+let c = 2.5e3f32;
+let d = 'x';
+let e = "a // b /* c";
+let f = b"\x00";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (global_binding
+    (identifier)
+    (integer_literal))
+  (global_binding
+    (identifier)
+    (integer_literal))
+  (global_binding
+    (identifier)
+    (float_literal))
+  (global_binding
+    (identifier)
+    (char_literal))
+  (global_binding
+    (identifier)
+    (string_literal
+      (string_content)))
+  (global_binding
+    (identifier)
+    (byte_string_literal
+      (escape_sequence))))
+
+================================================================================
+Raw strings, strings over lines, f-strings
+================================================================================
+
+let a = r#"say "hi""#;
+let b = """
+    line "one"
+    """;
+let c = f"{x} and {y:>8} {{braces}}";
+let d = fr"C:\{name}";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (global_binding
+    (identifier)
+    (raw_string_literal))
+  (global_binding
+    (identifier)
+    (multiline_string_literal))
+  (global_binding
+    (identifier)
+    (f_string
+      (interpolation
+        (identifier))
+      (f_string_content)
+      (interpolation
+        (identifier)
+        (format_spec))
+      (f_string_content)
+      (brace_escape)
+      (f_string_content)
+      (brace_escape)))
+  (global_binding
+    (identifier)
+    (f_string
+      (f_string_raw_content)
+      (interpolation
+        (identifier)))))
+
+================================================================================
+Comments that nest
+================================================================================
+
+/* a /* b */ c */
+/// the doc of x
+let x = 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (block_comment)
+  (line_comment)
+  (global_binding
+    (identifier)
+    (integer_literal)))

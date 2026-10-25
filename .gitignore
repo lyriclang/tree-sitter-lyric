@@ -1,0 +1,8 @@
+*.so
+*.dylib
+*.dll
+*.wasm
+*.o
+/build/
+/lyric/
+/spec/

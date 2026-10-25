@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  # the language moves in lyriclang/lyric: once a week the corpus at its main is read again
+  schedule:
+    - cron: "17 4 * * 1"
+
+permissions:
+  contents: read
+
+env:
+  TREE_SITTER_VERSION: "0.27.1"
+  TREE_SITTER_SHA256: "c7e686aec16ba17053c2e6fd87600ccb10cf8ba3d055756b17e756d538e11114"
+
+jobs:
+  grammar:
+    name: Grammar, tests, TextMate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: tree-sitter CLI
+        run: |
+          curl -fsSL -o /tmp/ts.zip "https://github.com/tree-sitter/tree-sitter/releases/download/v${TREE_SITTER_VERSION}/tree-sitter-cli-linux-x64.zip"
+          echo "${TREE_SITTER_SHA256}  /tmp/ts.zip" | sha256sum -c -
+          mkdir -p "$HOME/.local/bin" && unzip -q /tmp/ts.zip -d "$HOME/.local/bin" && chmod +x "$HOME/.local/bin/tree-sitter"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: The parser in src/ is the grammar's
+        run: |
+          tree-sitter generate --js-runtime native
+          git diff --exit-code -- src
+
+      - name: Trees and highlights
+        run: tree-sitter test
+
+      - name: The TextMate grammar is the grammar's
+        run: python3 script/textmate.py --check
+
+      - uses: actions/checkout@v4
+        with:
+          repository: lyriclang/lyric
+          path: lyric
+
+      - name: The spec at lyric's pin
+        run: |
+          pin=$(cat lyric/spec.pin)
+          git clone --quiet https://github.com/lyriclang/lyric-spec.git spec
+          git -C spec checkout --quiet "$pin"
+
+      - name: The corpus parses without an error
+        run: bash script/check-corpus.sh lyric spec
