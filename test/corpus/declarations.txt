@@ -368,3 +368,39 @@ extern "C" fn printf(format: CStr, ...): int32;
     (named_type
       (dotted_name
         (identifier)))))
+
+================================================================================
+A C function's pointer as a type
+================================================================================
+
+extern "C" fn apply(f: extern "C" fn(int) -> int, x: int): int;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (extern_spec
+      (string_literal
+        (string_content)))
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (function_type
+          (extern_spec
+            (string_literal
+              (string_content)))
+          (named_type
+            (dotted_name
+              (identifier)))
+          (named_type
+            (dotted_name
+              (identifier)))))
+      (parameter
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier)))))
+    (named_type
+      (dotted_name
+        (identifier)))))

@@ -76,6 +76,8 @@ module.exports = grammar({
     [$.parenthesized_expression, $.macro_arguments],
     [$.dotted_name, $.implicit_member],
     [$._contextual_name, $.type_alias],
+    // 'extern' in a type: a type's name, or the word before a C function's type
+    [$._contextual_name, $.extern_spec],
     [$.break_statement, $._expression, $.macro_invocation],
     [$.dotted_name, $.break_statement, $._expression],
     [$.break_statement, $._expression],
@@ -407,7 +409,9 @@ module.exports = grammar({
 
     array_type: $ => prec(40, seq($._unthrowing_type, '[', optional($.integer_literal), ']')),
 
+    // 'extern "C" fn(int) -> int': a pointer to a C function
     function_type: $ => prec.right(seq(
+      optional($.extern_spec),
       'fn',
       '(',
       commaSep(seq(optional('&'), $._type)),
