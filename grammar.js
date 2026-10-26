@@ -214,7 +214,15 @@ module.exports = grammar({
 
     type_list: $ => seq('[', commaSep($._type), ']'),
 
-    parameters: $ => seq('(', commaSep($.parameter), ')'),
+    // a bare '...' last: C's variadic arguments, an extern "C" function's alone
+    parameters: $ => seq('(', optional($._parameter_list), ')'),
+
+    _parameter_list: $ => choice(
+      $.c_variadic,
+      seq($.parameter, optional(seq(',', optional($._parameter_list)))),
+    ),
+
+    c_variadic: _ => '...',
 
     parameter: $ => seq(
       repeat($.attribute_item),

@@ -343,3 +343,28 @@ pub extern "C" {
           (identifier)))
       (string_literal
         (string_content)))))
+
+================================================================================
+C's variadic arguments
+================================================================================
+
+extern "C" fn printf(format: CStr, ...): int32;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (extern_spec
+      (string_literal
+        (string_content)))
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (named_type
+          (dotted_name
+            (identifier))))
+      (c_variadic))
+    (named_type
+      (dotted_name
+        (identifier)))))

@@ -947,6 +947,11 @@
     }
   },
   {
+    "type": "c_variadic",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "call_expression",
     "named": true,
     "fields": {
@@ -3074,6 +3079,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "c_variadic",
+          "named": true
+        },
         {
           "type": "parameter",
           "named": true
