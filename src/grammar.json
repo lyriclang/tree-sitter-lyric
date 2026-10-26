@@ -2612,6 +2612,18 @@
         "type": "SEQ",
         "members": [
           {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "extern_spec"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
             "type": "STRING",
             "value": "fn"
           },
@@ -7622,6 +7634,10 @@
     [
       "_contextual_name",
       "type_alias"
+    ],
+    [
+      "_contextual_name",
+      "extern_spec"
     ],
     [
       "break_statement",

@@ -1944,6 +1944,10 @@
           "named": true
         },
         {
+          "type": "extern_spec",
+          "named": true
+        },
+        {
           "type": "throws_clause",
           "named": true
         }
