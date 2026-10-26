@@ -16,6 +16,10 @@
         "named": true
       },
       {
+        "type": "extern_block",
+        "named": true
+      },
+      {
         "type": "function_declaration",
         "named": true
       },
@@ -1449,6 +1453,33 @@
       "types": [
         {
           "type": "conformances",
+          "named": true
+        },
+        {
+          "type": "visibility",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "extern_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute_item",
+          "named": true
+        },
+        {
+          "type": "extern_spec",
+          "named": true
+        },
+        {
+          "type": "function_declaration",
           "named": true
         },
         {
