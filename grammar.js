@@ -155,6 +155,7 @@ module.exports = grammar({
     _declaration: $ => choice(
       $.import_declaration,
       $.function_declaration,
+      $.extern_block,
       $.struct_declaration,
       $.class_declaration,
       $.enum_declaration,
@@ -162,6 +163,15 @@ module.exports = grammar({
       $.extend_declaration,
       $.global_binding,
       $.type_alias,
+    ),
+
+    // extern "C" { fn …; fn …; }: the functions of one ABI, each with its own attributes
+    extern_block: $ => seq(
+      optional($.visibility),
+      $.extern_spec,
+      '{',
+      repeat(choice($.attribute_item, $.function_declaration)),
+      '}',
     ),
 
     visibility: _ => choice('pub', 'internal', 'private'),

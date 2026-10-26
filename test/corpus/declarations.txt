@@ -297,3 +297,49 @@ extend<T> List<T> :: [Sized] {
                 (this)
                 (identifier))
               (arguments))))))))
+
+================================================================================
+An extern block
+================================================================================
+
+pub extern "C" {
+    fn strlen(s: CStr): uint;
+    @Cold
+    private fn labs(x: int): int = "labs";
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (extern_block
+    (visibility)
+    (extern_spec
+      (string_literal
+        (string_content)))
+    (function_declaration
+      (identifier)
+      (parameters
+        (parameter
+          (identifier)
+          (named_type
+            (dotted_name
+              (identifier)))))
+      (named_type
+        (dotted_name
+          (identifier))))
+    (attribute_item
+      (attribute_name))
+    (function_declaration
+      (visibility)
+      (identifier)
+      (parameters
+        (parameter
+          (identifier)
+          (named_type
+            (dotted_name
+              (identifier)))))
+      (named_type
+        (dotted_name
+          (identifier)))
+      (string_literal
+        (string_content)))))
